@@ -1,25 +1,25 @@
-# version: '3.8'
+version: '3.9'
 
-# services:
-#   app:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     image: laravel-app
-#     container_name: laravel_app
-#     restart: unless-stopped
-#     working_dir: /var/www
-#     volumes:
-#       - .:/var/www
-#     ports:
-#       - "9000:9000"
-#     environment:
-#       - APP_ENV=local
-#       - APP_DEBUG=true
-#       - APP_KEY=base64:$(php artisan key:generate --show)
-#     networks:
-#       - laravel
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-teste
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "9000:9000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:$(php artisan key:generate --show)
+    networks:
+      - laravel
 
-# networks:
-#   laravel:
-#     driver: bridge
+networks:
+  laravel:
+    driver: bridge
