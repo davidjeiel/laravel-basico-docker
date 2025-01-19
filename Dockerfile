@@ -30,8 +30,15 @@ COPY . /var/www
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
-# Expõe a porta utilizada pelo PHP-FPM
+# Instala as dependências do Composer
+RUN composer install --no-interaction --optimize-autoloader
+
+# Gera a chave da aplicação e cache de configuração
+RUN php artisan key:generate \
+    && php artisan config:cache
+
+# Expõe a porta 9000
 EXPOSE 9000
 
-# Comando para iniciar o PHP-FPM
-CMD ["php-fpm"]
+# Inicia o servidor do Laravel na porta 9000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"]
