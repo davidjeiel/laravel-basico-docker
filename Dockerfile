@@ -1,17 +1,19 @@
-# Utiliza a imagem oficial do PHP 8.1 com FPM
+# Use a imagem oficial do PHP 8.1 com FPM
 FROM php:8.1-fpm
 
 # Define o diretório de trabalho
 WORKDIR /var/www
 
 # Instala as dependências necessárias
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
     zip \
     unzip \
+    git \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo_mysql zip \
     && pecl install redis \
@@ -21,11 +23,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia o código da aplicação para o contêiner
+# Copia os arquivos da aplicação para o contêiner
 COPY . /var/www
 
 # Ajusta as permissões
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
 
 # Expõe a porta utilizada pelo PHP-FPM
 EXPOSE 9000
